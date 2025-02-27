@@ -30,5 +30,5 @@ jobs:
       - name: Deploy na GitHub Pages
         uses: actions/deploy-pages@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.G_TOKEN }}
           path: ./dist
