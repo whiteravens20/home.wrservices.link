@@ -1,0 +1,35 @@
+name: Fork Sync
+
+on:
+  schedule:
+    - cron: '55 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repo (your fork)
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Add upstream repository
+        run: |
+          git remote add upstream https://github.com/bastienwirtz/homer.git
+          git fetch upstream main
+
+      - name: Merge upstream changes into master
+        run: |
+          git checkout master
+          git merge --ff-only upstream/main || echo "No new changes to merge"
+
+      - name: Push changes to your fork
+        env:
+          GITHUB_TOKEN: ${{ secrets.G_TOKEN }}
+        run: |
+          git push origin master
