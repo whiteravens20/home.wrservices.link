@@ -1,42 +1,49 @@
-name: Fork Sync
+name: Sync Fork with Upstream
 
 on:
   schedule:
     - cron: '55 0 * * *'
   workflow_dispatch:
 
-permissions:
-  contents: write 
-
 jobs:
   sync:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout target repo (your fork)
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          fetch-depth: 0
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        ref: master
 
-      - name: Set up Git
-        run: |
-          git config --global user.name "pavlojs"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git config --global credential.helper 'store'
-          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
+    - name: Configure Git for GitHub Actions
+      run: |
+        git config user.name "GitHub Actions"
+        git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+        git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
 
-      - name: Add upstream repository
-        run: |
-          git remote add upstream https://github.com/bastienwirtz/homer.git
-          git fetch upstream main
+    - name: Fetch upstream changes
+      run: |
+        git remote add upstream https://github.com/bastienwirtz/homer.git
+        git fetch upstream
 
-      - name: Merge upstream changes into master
-        run: |
-          git checkout master
-          git merge upstream/main --allow-unrelated-histories -m "Sync fork with upstream"
+    - name: Merge upstream changes
+      run: |
+        git checkout master
+        git merge upstream/main --allow-unrelated-histories -m "Sync fork with upstream" || echo "No changes to merge"
 
-      - name: Push changes to your fork
-        run: |
-          git add .
-          git commit -m "Sync fork with upstream"
-          git push origin master
+    - name: Check if changes exist
+      id: changes
+      run: |
+        git diff --exit-code || echo "Changes detected"
+        echo "::set-output name=has_changes::$(git diff --exit-code || echo 'true')"
+
+    - name: Push changes to your fork
+      if: steps.changes.outputs.has_changes == 'true'
+      run: |
+        git push origin master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Done
+      if: steps.changes.outputs.has_changes != 'true'
+      run: echo "No changes to push, workflow completed successfully."
