@@ -133,6 +133,11 @@ services:
   - name: "White Ravens Poleca"
     icon: "fa-solid fa-star"
     items:
+      - name: "AdGuard Home"
+        icon: "fa-solid fa-shield-halved"
+        subtitle: "Bloker reklam i śledzenia. Serwer DNS"
+        tag: "opensource"
+        url: "https://adguard.com/pl/adguard-home/overview.html"
       - name: "New Pipe"
         icon: "fa-regular fa-file-video"
         subtitle: "Bezreklamowy klient YouTube dla Android"
