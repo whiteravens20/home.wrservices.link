@@ -1,3 +1,13 @@
+# White Ravens Dashboard
+
+[![Static Badge](https://img.shields.io/badge/Discord_PL-White%20Ravens-blue?logo=discord&labelColor=lightgrey&link=https%3A%2F%2Fdiscord.gg%2F5JMk8Z4)](https://discord.gg/5JMk8Z4)
+
+**[PL]** Kod źródłowy strony [home.wrservices.link](https://home.wrservices.link) stworzony przy pomocy [Homer](https://github.com/bastienwirtz/homer). Dzięki [bastienwirtz](https://github.com/bastienwirtz)!
+
+**[ENG]** Source code of [home.wrservices.link](https://home.wrservices.link) created with [Homer](https://github.com/bastienwirtz/homer). Thanks [bastienwirtz](hhttps://github.com/bastienwirtz)!
+
+---
+
 <h1 align="center">
  <img
   width="180"
